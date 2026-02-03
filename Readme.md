@@ -1,40 +1,54 @@
-# How to Run the Project
+# Scalable Job Importer
 
-## Prerequisites
-- Node.js (v18+ recommended)
-- MongoDB (local or cloud)
-- Redis (cloud or local)
+A scalable job import system that fetches jobs from external XML feeds, processes them using Redis queues, and stores them in MongoDB with upsert logic.
 
-## Setup Steps
+---
 
-1. Clone the repository
-git clone <your-repo-url>
+## Tech Stack
+- Frontend: Next.js
+- Backend: Node.js + Express
+- Database: MongoDB
+- Queue: BullMQ
+- Cache: Redis
+
+---
+
+## How to Run (Backend)
+
+### Prerequisites
+- Node.js (v18+)
+- MongoDB (local or Atlas)
+- Redis (local or cloud)
+
+### Setup
+
+```bash
 cd server
-
-2. Install dependencies
 npm install
 
-3. Create a `.env` file in the server folder
-PORT=5000
+
+```
+### Create a .env file inside /server:
+
+```bash
 MONGO_URI=your_mongodb_connection_string
 REDIS_URL=your_redis_connection_string
+```
 
-Note:
-Redis eviction policy should be set to `noeviction` for best results.
-
-4. Start the server
+## Start the Server
+```bash
 node src/server.js
+```
+after running the server make an api call 
 
-Server will run on:
-http://localhost:5000
+POST /api/run-import
 
-## API Usage
+in the body use json
 
-Start job import:
-POST http://localhost:5000/api/import
+{
+  "feedUrl": "https://jobicy.com/?feed=job_feed&job_categories=copywriting"
+}
 
-View import logs:
-GET http://localhost:5000/api/import-logs
+## View Import History
 
-The system uses Redis queues (BullMQ) to process jobs asynchronously
-and MongoDB upsert logic to handle large-scale job imports efficiently.
+GET /api/import-logs
