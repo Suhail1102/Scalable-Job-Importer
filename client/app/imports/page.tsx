@@ -7,7 +7,7 @@ export default function ImportHistoryPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/import-logs')
+    fetch('https://scalable-job-importer-wonz.onrender.com/api/import-logs')
       .then(res => res.json())
       .then(data => setLogs(data))
       .finally(() => setLoading(false));
