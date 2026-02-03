@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const importRoutes = require('./routes/import.routes');
 const cors = require('cors');
+const PORT = process.env.PORT || 5000;
 
 dotenv.config();
 
@@ -10,20 +11,21 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: '*',
   methods: ['GET', 'POST'],
 }));
+
 
 // API routes
 app.use('/api', importRoutes);
 
-// 👇 START THE WORKER
+// START THE WORKER
 require('./jobs/job.worker');
 
 mongoose.connect(process.env.MONGO_URI).then(() => {
   console.log('MongoDB connected');
 
-  app.listen(5000, () => {
-    console.log('Server running on 5000');
+  app.listen(PORT, () => {
+    console.log(`Server running on ${PORT}`);
   });
 });
